@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vazifalar va Rejalar Ro'yxati (To-Do List)</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="code-background-overlay"></div>
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <main class="main-wrapper">
+    <!-- Header Hero Section -->
+    <header class="header-section">
+      <h1 class="main-title">Vazifalar va Rejalar Ro'yxati (To-Do List) Internet Dasturi</h1>
+      <p class="subtitle">
+        Senior Frontend Dasturchi bilan noldan boshlab qadamma-qadam amaliy qo'llanma. 
+        HTML, CSS va JavaScript texnologiyalari yordamida.
+      </p>
+    </header>
+
+    <!-- App Container -->
+    <div class="todo-outer-container">
+      <div class="todo-card">
+        <!-- Card Header -->
+        <div class="card-header">
+          <div class="title-with-icon">
+            <span class="notebook-icon" aria-hidden="true">📒</span>
+            <h2>Vazifalar ro'yxati</h2>
+          </div>
+          <div class="badge-counter" id="badgeCounter" title="Bajarilgan vazifalar">
+            <span id="completedCount">1</span>/<span id="totalCount">3</span>
+          </div>
+        </div>
+
+        <!-- Input Form -->
+        <form id="todoForm" class="todo-input-capsule">
+          <input 
+            type="text" 
+            id="todoInput" 
+            class="todo-input" 
+            placeholder="Vazifangizni yozing..." 
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button type="submit" class="add-button" id="addButton">
+            <span>Qo'shish</span>
+            <svg class="plus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="16"></line>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Todo List -->
+        <ul id="todoList" class="todo-list" aria-label="Vazifalar ro'yxati">
+          <!-- Dinamik ravishda JavaScript orqali to'ldiriladi -->
+        </ul>
+
+        <!-- Card Footer (Stats & Actions) -->
+        <div class="card-footer" id="cardFooter">
+          <span class="footer-stats" id="footerStats">3 ta vazifadan 1 tasi bajarildi</span>
+          <button type="button" class="clear-completed-btn" id="clearCompletedBtn">
+            Bajarilganlarni tozalash
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

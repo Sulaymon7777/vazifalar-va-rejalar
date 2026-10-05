@@ -1,0 +1,450 @@
+/* ==========================================================================
+   Vazifalar va Rejalar Ro'yxati (To-Do List) - Zamonaviy Uslublar
+   ========================================================================== */
+
+:root {
+  --primary-orange: #f24e23;
+  --primary-orange-hover: #e03e14;
+  --primary-orange-glow: rgba(242, 78, 35, 0.38);
+  --blue-gradient: linear-gradient(145deg, #1a56db 0%, #4338ca 50%, #7e22ce 100%);
+  --text-dark: #191f28;
+  --text-muted: #8b95a1;
+  --text-done: #9da7b3;
+  --bg-input: #f2f4f7;
+  --border-light: #eceff3;
+  --card-radius: 22px;
+  --capsule-radius: 50px;
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  background-color: #0d1117;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+/* Orqa fon dasturchi kod effekti (Developer Background) */
+.code-background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(30, 64, 175, 0.25) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(126, 34, 206, 0.2) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.75) 0%, rgba(13, 17, 23, 0.96) 100%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.015) 0px,
+      rgba(255, 255, 255, 0.015) 1px,
+      transparent 1px,
+      transparent 28px
+    );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Yorituvchi orqa sharlar */
+.glow-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.orb-1 {
+  width: 420px;
+  height: 420px;
+  background: #2563eb;
+  top: -100px;
+  left: -80px;
+}
+
+.orb-2 {
+  width: 380px;
+  height: 380px;
+  background: #9333ea;
+  bottom: -80px;
+  right: -60px;
+}
+
+/* Asosiy konteyner */
+.main-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 820px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+
+/* Sarlavha qismi */
+.header-section {
+  text-align: center;
+  max-width: 760px;
+}
+
+.main-title {
+  font-size: clamp(1.6rem, 3.8vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+  margin-bottom: 14px;
+  line-height: 1.25;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.subtitle {
+  font-size: clamp(0.95rem, 1.8vw, 1.125rem);
+  color: #cbd5e1;
+  font-weight: 400;
+  line-height: 1.6;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* Tashqi ko'k-binafsha ramka */
+.todo-outer-container {
+  width: 100%;
+  max-width: 600px;
+  background: var(--blue-gradient);
+  padding: 42px 28px;
+  border-radius: 34px;
+  box-shadow: 
+    0 24px 60px -15px rgba(26, 86, 219, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Ichki oq kartochka */
+.todo-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: var(--card-radius);
+  padding: 34px 30px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14);
+  color: var(--text-dark);
+}
+
+/* Karta tepasi (Header) */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.notebook-icon {
+  font-size: 1.9rem;
+  line-height: 1;
+  display: inline-block;
+  transform: translateY(-1px);
+}
+
+.card-header h2 {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.015em;
+}
+
+.badge-counter {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary-orange);
+  background: rgba(242, 78, 35, 0.1);
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* Kiritish qatori (Pill capsule) */
+.todo-input-capsule {
+  display: flex;
+  align-items: center;
+  background: var(--bg-input);
+  border-radius: var(--capsule-radius);
+  padding: 5px 6px 5px 20px;
+  position: relative;
+  margin-bottom: 26px;
+  border: 1px solid transparent;
+  transition: var(--transition);
+}
+
+.todo-input-capsule:focus-within {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.todo-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: #1e293b;
+  outline: none;
+  padding: 10px 4px;
+}
+
+.todo-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+/* Qo'shish tugmasi */
+.add-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #ff6339 0%, #f04e23 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--capsule-radius);
+  padding: 11px 22px;
+  font-family: inherit;
+  font-size: 0.98rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 18px var(--primary-orange-glow);
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.add-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(242, 78, 35, 0.5);
+  background: linear-gradient(135deg, #ff714a 0%, #eb4619 100%);
+}
+
+.add-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 10px rgba(242, 78, 35, 0.35);
+}
+
+.plus-icon {
+  width: 18px;
+  height: 18px;
+  stroke: #ffffff;
+}
+
+/* Vazifalar ro'yxati */
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 4px;
+  border-bottom: 1px solid var(--border-light);
+  transition: var(--transition);
+  cursor: pointer;
+  user-select: none;
+}
+
+.todo-item:last-child {
+  border-bottom: none;
+}
+
+.todo-item:hover {
+  background: rgba(248, 250, 252, 0.8);
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.todo-content-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+/* Doira belgisi (Checkbox) */
+.custom-checkbox {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.todo-item:hover .custom-checkbox {
+  border-color: #94a3b8;
+}
+
+.custom-checkbox svg {
+  width: 14px;
+  height: 14px;
+  stroke: #ffffff;
+  stroke-width: 3;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: var(--transition);
+}
+
+/* Vazifa matni */
+.todo-text {
+  font-size: 1.02rem;
+  font-weight: 500;
+  color: #334155;
+  transition: var(--transition);
+  word-break: break-word;
+}
+
+/* Bajarilgan (Completed) holat */
+.todo-item.completed .custom-checkbox {
+  background-color: var(--primary-orange);
+  border-color: var(--primary-orange);
+}
+
+.todo-item.completed .custom-checkbox svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.todo-item.completed .todo-text {
+  color: var(--text-done);
+  text-decoration: line-through;
+}
+
+/* O'chirish tugmasi */
+.delete-btn {
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  opacity: 0;
+}
+
+.todo-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  color: #ef4444;
+  background: #fee2e2;
+}
+
+.delete-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Bo'sh ro'yxat holati */
+.empty-state {
+  text-align: center;
+  padding: 35px 20px 20px;
+  color: #94a3b8;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  margin-top: 8px;
+}
+
+/* Karta pastki qismi (Footer) */
+.card-footer {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.clear-completed-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: var(--transition);
+}
+
+.clear-completed-btn:hover {
+  color: var(--primary-orange);
+}
+
+/* Moslashuvchanlik (Responsive) */
+@media (max-width: 640px) {
+  body {
+    padding: 24px 14px;
+  }
+
+  .todo-outer-container {
+    padding: 20px 14px;
+    border-radius: 26px;
+  }
+
+  .todo-card {
+    padding: 24px 18px;
+  }
+
+  .card-header h2 {
+    font-size: 1.35rem;
+  }
+
+  .todo-input-capsule {
+    padding-left: 14px;
+  }
+
+  .add-button {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .delete-btn {
+    opacity: 1;
+  }
+}
